@@ -1,0 +1,34 @@
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum(valueField: 'value')
+enum VisaType {
+  none(-1, 'None'),
+  withoutVisa(0, 'Without Visa'),
+  withVisa(1, 'With Visa'),
+  visaOnArrival(2, 'Visa on Arrival'),
+  evisa(3, 'E-Visa');
+
+  final int value;
+  final String description;
+
+  const VisaType(this.value, this.description);
+
+  String toString() => description;
+
+  static VisaType fromJson(int value) {
+    switch (value) {
+      case -1:
+        return none;
+      case 0:
+        return withoutVisa;
+      case 1:
+        return withVisa;
+      case 2:
+        return visaOnArrival;
+      case 3:
+        return evisa;
+      default:
+        throw ArgumentError.value(value, 'value');
+    }
+  }
+}

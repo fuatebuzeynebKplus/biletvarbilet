@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "56125949298",
+    "project_id": "biletvarbilet-307ac",
+    "storage_bucket": "biletvarbilet-307ac.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:56125949298:android:99323ede9f04c30d1349eb",
+        "android_client_info": {
+          "package_name": "com.kplus.biletvarbilet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKV4j8ve3d8GHE-RoxWJDfB-hR2trH5Lg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
