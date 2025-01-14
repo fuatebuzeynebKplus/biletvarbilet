@@ -273,10 +273,7 @@ class HotelReservationDetailsView extends StatelessWidget {
                             const SizedBox(
                               height: 6,
                             ),
-                            ReservationDetailsContainerWidget(
-                              index:
-                                  flightTicketCubit.saveReservationIndexValue!,
-                            ),
+                            const ReservationDetailsContainerWidget(),
                             const SizedBox(
                               height: 6,
                             ),

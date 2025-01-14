@@ -2504,9 +2504,12 @@ class FlightTicketCubit extends Cubit<FlightTicketState> {
     }
   }
 
+  GetBookingModel? getBookingModelDetails;
+
   Future<dynamic> getBooking(
       CancelReservationJson request, BuildContext context) async {
     emit(GetReservationsLoading());
+    getBookingModelDetails = null;
     //   print('*******************---------------------');
     String url =
         '$apiBaseUrl/GetBooking'; // API uç noktasını doğru bir şekilde güncelleyin
@@ -2535,19 +2538,12 @@ class FlightTicketCubit extends Cubit<FlightTicketState> {
 
       final responseData = response.data;
 
-      final result = BookingResultReservations.fromJson(responseData);
+      final result = GetBookingModel.fromJson(responseData);
       if (result.errorCode == null) {
         if (result.result != null) {
-          getReservationsList = result.result!;
-          savedGetReservationsList = result.result!;
-          for (var item in result.result!) {
-            if (item.flightBookingList != null &&
-                item.flightBookingList!.isNotEmpty) {
-              getReservationsList.add(item);
-              savedGetReservationsList.add(item);
-            }
-          }
+          getBookingModelDetails = result;
           emit(GetReservationsSuccess());
+          print('done');
           return result;
         } else {
           List<ErrorsModel> errors = ErrorsModel.getErrorList(context);

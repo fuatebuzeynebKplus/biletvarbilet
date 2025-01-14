@@ -136,7 +136,7 @@ class NewFareCard extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Expanded(
-                                          flex: 6,
+                                          flex: 9,
                                           child: Wrap(
                                             spacing: 2.0,
                                             children: List.generate(
@@ -166,7 +166,7 @@ class NewFareCard extends StatelessWidget {
                                           ),
                                         ),
                                         Expanded(
-                                          flex: 4,
+                                          flex: 5,
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,

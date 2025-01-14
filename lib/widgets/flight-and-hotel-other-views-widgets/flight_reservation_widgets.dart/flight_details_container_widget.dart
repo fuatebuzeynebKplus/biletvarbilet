@@ -1,8 +1,7 @@
-import 'package:bamobile1/common/data/enums/booking_status_type.dart';
 import 'package:bamobile1/cubit/flight_ticket-cubit/flight_ticket_cubit.dart';
-import 'package:bamobile1/flight/data/models/flight_booking.dart';
 import 'package:bamobile1/flight/data/models/flight_booking_leg.dart';
 import 'package:bamobile1/flight/data/models/flight_booking_pax.dart';
+import 'package:bamobile1/flight/data/models/get_booking_model.dart';
 import 'package:bamobile1/generated/l10n.dart';
 import 'package:bamobile1/utils/app_colors.dart';
 import 'package:bamobile1/utils/app_sizes.dart';
@@ -14,30 +13,21 @@ import 'package:intl/intl.dart';
 class FlightDetailsContainerWidget extends StatelessWidget {
   const FlightDetailsContainerWidget({
     super.key,
-    required this.index,
-    this.thisViewIsResultView = false,
   });
-
-  final int index;
-  final bool thisViewIsResultView;
 
   @override
   Widget build(BuildContext context) {
     FlightTicketCubit flightTicketCubit =
         BlocProvider.of<FlightTicketCubit>(context);
-    List<FlightBooking>? flightBookingList;
-    if (thisViewIsResultView == false) {
-      flightBookingList =
-          flightTicketCubit.getReservationsList[index].flightBookingList!;
-    } else {
-      flightBookingList =
-          flightTicketCubit.detailsForResultView!.flightBookingList!;
-    }
+    List<FlightBookingList> flightBookingList = [];
 
-    List<List<FlightBookingLeg>> legList = [];
+    flightBookingList =
+        flightTicketCubit.getBookingModelDetails!.result!.flightBookingList;
+
+    List<List<Leg>> legList = [];
 
     for (var elementMain in flightBookingList) {
-      legList.add(elementMain.legs!);
+      legList.add(elementMain.legs);
     }
 
     print('legList: ${legList.length}');
@@ -166,11 +156,10 @@ class FlightDetailsContainerWidget extends StatelessWidget {
                                       TextWidget(
                                         text: flightTicketCubit
                                             .convertArabicNumbersToEnglish(
-                                                DateFormat('dd.MM.yyyy HH:mm')
-                                                    .format(DateTime.parse(
-                                                        legList[indexMain]
-                                                                [indexList]
-                                                            .departureDate!))),
+                                          DateFormat('dd.MM.yyyy HH:mm').format(
+                                              legList[indexMain][indexList]
+                                                  .departureDate!),
+                                        ),
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey,
@@ -223,7 +212,7 @@ class FlightDetailsContainerWidget extends StatelessWidget {
                                       ),
                                       TextWidget(
                                         text:
-                                            '${flightBookingList![indexMain].pnr}',
+                                            '${flightBookingList[indexMain].pnr}',
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey,

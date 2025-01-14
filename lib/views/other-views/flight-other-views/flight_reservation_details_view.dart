@@ -284,24 +284,15 @@ class FlightReservationDetailsView extends StatelessWidget {
                             const SizedBox(
                               height: 6,
                             ),
-                            ReservationDetailsContainerWidget(
-                              index:
-                                  flightTicketCubit.saveReservationIndexValue!,
-                            ),
+                            const ReservationDetailsContainerWidget(),
                             const SizedBox(
                               height: 6,
                             ),
-                            PassengersDetailsContainerWidget(
-                              index:
-                                  flightTicketCubit.saveReservationIndexValue!,
-                            ),
+                            const PassengersDetailsContainerWidget(),
                             const SizedBox(
                               height: 6,
                             ),
-                            FlightDetailsContainerWidget(
-                              index:
-                                  flightTicketCubit.saveReservationIndexValue!,
-                            ),
+                            const FlightDetailsContainerWidget(),
                             const SizedBox(
                               height: 16,
                             ),

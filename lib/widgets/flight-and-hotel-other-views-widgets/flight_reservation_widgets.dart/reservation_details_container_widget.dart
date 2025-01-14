@@ -12,16 +12,42 @@ import 'package:intl/intl.dart';
 class ReservationDetailsContainerWidget extends StatelessWidget {
   const ReservationDetailsContainerWidget({
     super.key,
-    required this.index,
-    this.thisViewIsResultView = false,
   });
-  final int index;
-  final bool thisViewIsResultView;
+
   @override
   Widget build(BuildContext context) {
     FlightTicketCubit flightTicketCubit =
         BlocProvider.of<FlightTicketCubit>(context);
 
+    var contactInfo = flightTicketCubit.getBookingModelDetails!.result!;
+    BookingStatusType bookingStatusTypeValue =
+        BookingStatusType.reservationFailed;
+    // تحويل من القيم (int) إلى التعداد (enum)
+
+    switch (contactInfo.bookingStatusType!) {
+      case 1:
+        bookingStatusTypeValue = BookingStatusType.reservationSucceed;
+      case 2:
+        bookingStatusTypeValue = BookingStatusType.reservationFailed;
+      case 3:
+        bookingStatusTypeValue = BookingStatusType.reservationExpired;
+      case 4:
+        bookingStatusTypeValue = BookingStatusType.reservationCancelled;
+      case 6:
+        bookingStatusTypeValue = BookingStatusType.ticketingFailed;
+      case 7:
+        bookingStatusTypeValue = BookingStatusType.ticketingSucceed;
+      case 8:
+        bookingStatusTypeValue = BookingStatusType.ticketingCancelled;
+      case 12:
+        bookingStatusTypeValue = BookingStatusType.reservationChanged;
+      case 13:
+        bookingStatusTypeValue = BookingStatusType.ticketingChanged;
+      case 14:
+        bookingStatusTypeValue = BookingStatusType.cancellationPending;
+      case 16:
+        bookingStatusTypeValue = BookingStatusType.ticketingVoid;
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -51,8 +77,7 @@ class ReservationDetailsContainerWidget extends StatelessWidget {
                       color: Colors.black,
                     ),
                     TextWidget(
-                      text:
-                          '${thisViewIsResultView == true ? flightTicketCubit.detailsForResultView!.systemPnr : flightTicketCubit.getReservationsList[index ?? 0].systemPnr}', //totalPrice!,
+                      text: '${contactInfo.systemPnr}', //totalPrice!,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey,
@@ -68,14 +93,8 @@ class ReservationDetailsContainerWidget extends StatelessWidget {
                       color: Colors.black,
                     ),
                     TextWidget(
-                      text: thisViewIsResultView == true
-                          ? BookingStatusType.fromValue(flightTicketCubit
-                                  .detailsForResultView!.bookingStatusType!)
-                              .description(context)
-                          : BookingStatusType.fromValue(flightTicketCubit
-                                  .getReservationsList[index]
-                                  .bookingStatusType!)
-                              .description(context), //totalPrice!,
+                      text: BookingStatusType.fromValue(bookingStatusTypeValue)
+                          .description(context),
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey,
@@ -93,37 +112,8 @@ class ReservationDetailsContainerWidget extends StatelessWidget {
                     ),
                     TextWidget(
                       text: flightTicketCubit.convertArabicNumbersToEnglish(
-                          DateFormat('dd.MM.yyyy HH:mm').format(DateTime.parse(
-                              thisViewIsResultView == true
-                                  ? flightTicketCubit
-                                      .detailsForResultView!.bookingDate!
-                                  : flightTicketCubit.getReservationsList[index]
-                                      .bookingDate!))), //totalPrice!,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    TextWidget(
-                      text:
-                          '${S.of(context).ExpirationDate}:   ', //totalPrice!,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    TextWidget(
-                      text: flightTicketCubit.convertArabicNumbersToEnglish(
-                          DateFormat('dd.MM.yyyy HH:mm').format(DateTime.parse(
-                                  thisViewIsResultView == true
-                                      ? flightTicketCubit
-                                          .detailsForResultView!.expirationDate!
-                                      : flightTicketCubit
-                                          .getReservationsList[index]
-                                          .expirationDate!)
-                              .toLocal())), //totalPrice!,
+                          DateFormat('dd.MM.yyyy HH:mm')
+                              .format(contactInfo.bookingDate!)), //totalPrice!,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey,

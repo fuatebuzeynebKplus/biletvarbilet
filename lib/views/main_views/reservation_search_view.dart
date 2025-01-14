@@ -7,6 +7,8 @@ import 'package:bamobile1/hotel/data/models/cancel_reservation.dart';
 import 'package:bamobile1/utils/app_colors.dart';
 import 'package:bamobile1/widgets/button_widget.dart';
 import 'package:bamobile1/widgets/flight-and-hotel-other-views-widgets/flight_reservation_widgets.dart/get_reservations_card_widget.dart';
+import 'package:bamobile1/widgets/get-booking-widgets/get_booking_card.dart';
+import 'package:bamobile1/widgets/loading_widget.dart';
 import 'package:bamobile1/widgets/text_field_other_design_widget.dart';
 import 'package:bamobile1/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,9 @@ class ReservationSearchView extends StatelessWidget {
         BlocProvider.of<FlightTicketCubit>(context);
     return BlocConsumer<FlightTicketCubit, FlightTicketState>(
       listener: (context, state) {
-        // TODO: implement listener
+        state is GetReservationsFailure
+            ? SnackbarUtils.showSnackbar(context, state.errorMassage, 2)
+            : null;
       },
       builder: (context, state) {
         return Scaffold(
@@ -65,77 +69,79 @@ class ReservationSearchView extends StatelessWidget {
               ),
               backgroundColor: AppColors.kAppBarColor,
             ),
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Column(
-                children: [
-                  TextFieldOtherDesignWidget(
-                    autofocus: false,
-                    text: 'PNR Number',
-                    height: 0.055,
-                    width: 1,
-                    circularRightTopAndBottom: 6,
-                    circularLeftTopAndBottom: 6,
-                    onChanged: (value) {
-                      flightTicketCubit.systemPnrForGetBook = value;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  TextFieldOtherDesignWidget(
-                    autofocus: false,
-                    text: S.of(context).LastName,
-                    height: 0.055,
-                    width: 1,
-                    circularRightTopAndBottom: 6,
-                    circularLeftTopAndBottom: 6,
-                    onChanged: (value) {
-                      flightTicketCubit.lastNameForGetBook = value;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  ButtonWidget(
-                    title: S.of(context).Search,
-                    height: 0.05,
-                    width: 0.6,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    textColor: Colors.white,
-                    color: AppColors.kSecondColor,
-                    onTap: () async {
-                      if (flightTicketCubit.systemPnrForGetBook == null ||
-                          flightTicketCubit.lastNameForGetBook == null) {
-                        SnackbarUtils.showSnackbar(
-                            context, S.of(context).pleaseFillAllFields);
-                      } else {
-                        await flightTicketCubit.getBooking(
-                            CancelReservationJson(
-                                request: CancelReservation(
-                                    tokenCode: getIt<CacheHelper>()
-                                            .getDataString(key: 'token') ??
-                                        "",
-                                    SystemPnr:
-                                        flightTicketCubit.systemPnrForGetBook!,
-                                    LastName:
-                                        flightTicketCubit.lastNameForGetBook!)),
-                            context);
-                      }
-                    },
-                  ),
-                  const SizedBox(
-                    height: 36,
-                  ),
-                  flightTicketCubit.getReservationsList.isEmpty
-                      ? const SizedBox()
-                      : const GetReservationsCardWidget(
-                          index: 0,
+            body: state is GetReservationsLoading
+                ? const LoadingWidget()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    child: Column(
+                      children: [
+                        TextFieldOtherDesignWidget(
+                          autofocus: false,
+                          text: 'PNR Number',
+                          height: 0.055,
+                          width: 1,
+                          circularRightTopAndBottom: 6,
+                          circularLeftTopAndBottom: 6,
+                          onChanged: (value) {
+                            flightTicketCubit.systemPnrForGetBook = value;
+                          },
                         ),
-                ],
-              ),
-            ));
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        TextFieldOtherDesignWidget(
+                          autofocus: false,
+                          text: S.of(context).LastName,
+                          height: 0.055,
+                          width: 1,
+                          circularRightTopAndBottom: 6,
+                          circularLeftTopAndBottom: 6,
+                          onChanged: (value) {
+                            flightTicketCubit.lastNameForGetBook = value;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        ButtonWidget(
+                          title: S.of(context).Search,
+                          height: 0.05,
+                          width: 0.6,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          textColor: Colors.white,
+                          color: AppColors.kSecondColor,
+                          onTap: () async {
+                            if (flightTicketCubit.systemPnrForGetBook == null ||
+                                flightTicketCubit.lastNameForGetBook == null) {
+                              SnackbarUtils.showSnackbar(
+                                  context, S.of(context).pleaseFillAllFields);
+                            } else {
+                              await flightTicketCubit.getBooking(
+                                  CancelReservationJson(
+                                      request: CancelReservation(
+                                          tokenCode: getIt<CacheHelper>()
+                                                  .getDataString(
+                                                      key: 'token') ??
+                                              "",
+                                          SystemPnr: flightTicketCubit
+                                              .systemPnrForGetBook!,
+                                          LastName: flightTicketCubit
+                                              .lastNameForGetBook!)),
+                                  context);
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 36,
+                        ),
+                        flightTicketCubit.getBookingModelDetails != null
+                            ? const GetBookingCard()
+                            : const SizedBox()
+                      ],
+                    ),
+                  ));
       },
     );
   }

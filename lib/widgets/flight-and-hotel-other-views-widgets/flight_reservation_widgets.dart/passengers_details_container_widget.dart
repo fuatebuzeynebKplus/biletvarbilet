@@ -1,43 +1,31 @@
-import 'package:bamobile1/common/data/enums/booking_status_type.dart';
 import 'package:bamobile1/cubit/flight_ticket-cubit/flight_ticket_cubit.dart';
-import 'package:bamobile1/flight/data/models/flight_booking.dart';
-import 'package:bamobile1/flight/data/models/flight_booking_leg.dart';
 import 'package:bamobile1/flight/data/models/flight_booking_pax.dart';
+import 'package:bamobile1/flight/data/models/get_booking_model.dart';
 import 'package:bamobile1/generated/l10n.dart';
 import 'package:bamobile1/utils/app_colors.dart';
 import 'package:bamobile1/utils/app_sizes.dart';
 import 'package:bamobile1/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class PassengersDetailsContainerWidget extends StatelessWidget {
   const PassengersDetailsContainerWidget({
     super.key,
-    required this.index,
-    this.thisViewIsResultView = false,
   });
-
-  final int index;
-  final bool thisViewIsResultView;
 
   @override
   Widget build(BuildContext context) {
     FlightTicketCubit flightTicketCubit =
         BlocProvider.of<FlightTicketCubit>(context);
-    List<FlightBooking>? flightBookingList;
-    if (thisViewIsResultView == false) {
-      flightBookingList =
-          flightTicketCubit.getReservationsList[index].flightBookingList!;
-    } else {
-      flightBookingList =
-          flightTicketCubit.detailsForResultView!.flightBookingList!;
-    }
+    List<FlightBookingList> flightBookingList = [];
 
-    List<List<FlightBookingPax>> paxList = [];
+    flightBookingList =
+        flightTicketCubit.getBookingModelDetails!.result!.flightBookingList;
+
+    List<List<PaxList>> paxList = [];
 
     for (var elementMain in flightBookingList) {
-      paxList.add(elementMain.paxList!);
+      paxList.add(elementMain.paxList);
     }
     print('paxList: $paxList');
     return Column(

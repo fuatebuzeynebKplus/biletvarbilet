@@ -4,6 +4,7 @@ import 'package:bamobile1/views/other-views/sign_up_view.dart';
 
 import 'package:bamobile1/views/other-views/tow_factor_login_view.dart';
 import 'package:bamobile1/views/ticket-views/multi_point_views/flight_ticket_select_multi_point_seat_view.dart';
+import 'package:bamobile1/widgets/get-booking-widgets/book_details_view.dart';
 import 'package:bamobile1/widgets/ticket-widgets/flight-ticket-select-seat-type-widgets/new_fare_card.dart';
 import 'package:bamobile1/views/hotel-views/hotel_guest_data_enter_view.dart';
 import 'package:bamobile1/views/hotel-views/hotel_guest_details_view.dart';
@@ -70,6 +71,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
       const FlightTicketSelectMultiPointSeatView(),
   PdfPreviewScreen.id: (context) => const PdfPreviewScreen(),
   TowFactorLogin.id: (context) => const TowFactorLogin(),
+  BookDetailsView.id: (context) => const BookDetailsView(),
 
   //----------------------hotel-------------------------
   HotelView.id: (context) => const HotelView(),

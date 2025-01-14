@@ -14,6 +14,7 @@ import 'package:bamobile1/utils/app_colors.dart';
 import 'package:bamobile1/utils/app_sizes.dart';
 import 'package:bamobile1/views/other-views/sign_in_view.dart';
 import 'package:bamobile1/widgets/text_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,6 +24,7 @@ class SplashView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<AuthCubit>(context).createToken(context: context);
+
     BlocProvider.of<FirebaseCubit>(context).getVersionData();
     BlocProvider.of<SwiperCubit>(context).getImagesData();
 

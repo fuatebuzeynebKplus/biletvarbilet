@@ -150,7 +150,7 @@ class NewFareCardLeaving extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Expanded(
-                                          flex: 6,
+                                          flex: 9,
                                           child: Wrap(
                                             spacing: 2.0,
                                             children: List.generate(
@@ -180,7 +180,7 @@ class NewFareCardLeaving extends StatelessWidget {
                                           ),
                                         ),
                                         Expanded(
-                                          flex: 4,
+                                          flex: 5,
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,

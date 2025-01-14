@@ -17,10 +17,10 @@ class GetBookingModel {
   final dynamic resultExpireDate;
   final dynamic errorCode;
   final dynamic errorMessage;
-  final int? errorType;
+  final dynamic errorType;
   final bool? hasError;
   final ResultGetModel? result;
-  final int? resultCount;
+  final dynamic resultCount;
   final dynamic userFriendlyErrorMessage;
 
   factory GetBookingModel.fromJson(Map<String, dynamic> json) {
@@ -82,7 +82,7 @@ class ResultGetModel {
   final DateTime? bookingDate;
   final String? bookingNote;
   final List<dynamic> bookingPayments;
-  final int? bookingStatusType;
+  final dynamic bookingStatusType;
   final List<dynamic> campaigns;
   final List<dynamic> carBookingList;
   final dynamic channelTrackingNumber;
@@ -98,7 +98,7 @@ class ResultGetModel {
   final InvoiceInfo? invoiceInfo;
   final String? languageCode;
   final String? processId;
-  final int? productType;
+  final dynamic productType;
   final String? systemPnr;
   final String? tokenCode;
   final List<dynamic> tourBookingList;
@@ -199,18 +199,18 @@ class Amount {
   final double? baseBuyAmount;
   final double? baseSellAmount;
   final List<CollectionList> collectionList;
-  final int? commission;
+  final dynamic commission;
   final String? currencyCode;
   final dynamic data;
   final List<dynamic> discountList;
-  final int? originalCommission;
-  final int? serviceFee;
+  final dynamic originalCommission;
+  final dynamic serviceFee;
   final List<TaxList> taxList;
   final double? totalBuyAmount;
-  final int? totalCommission;
-  final int? totalDiscountAmount;
-  final int? totalPaymentTypeSellAmount;
-  final int? totalPenaltySellAmount;
+  final dynamic totalCommission;
+  final dynamic totalDiscountAmount;
+  final dynamic totalPaymentTypeSellAmount;
+  final dynamic totalPenaltySellAmount;
   final double? totalSellAmount;
   final double? totalTaxAmount;
 
@@ -262,9 +262,9 @@ class CollectionList {
   final DateTime? createdAt;
   final String? operationCurrencyCode;
   final DateTime? paidAt;
-  final int? paymentType;
-  final int? paymentTypeAmount;
-  final int? paymentTypeItemId;
+  final dynamic paymentType;
+  final dynamic paymentTypeAmount;
+  final dynamic paymentTypeItemId;
 
   factory CollectionList.fromJson(Map<String, dynamic> json) {
     return CollectionList(
@@ -308,7 +308,7 @@ class ContactInfo {
 
   final String? email;
   final String? firstName;
-  final int? genderType;
+  final dynamic genderType;
   final String? lastName;
   final String? phone;
 
@@ -330,7 +330,7 @@ class Contract {
   });
 
   final String? content;
-  final int? productType;
+  final dynamic productType;
 
   factory Contract.fromJson(Map<String, dynamic> json) {
     return Contract(
@@ -360,7 +360,7 @@ class FlightBookingList {
 
   final Amount? amount;
   final DateTime? bookingDate;
-  final int? bookingStatusType;
+  final dynamic bookingStatusType;
   final bool? canExchange;
   final bool? canRefund;
   final dynamic corporatePin;
@@ -371,7 +371,7 @@ class FlightBookingList {
   final String? pnr;
   final List<Rule> rules;
   final List<Rule> services;
-  final int? voidTime;
+  final dynamic voidTime;
 
   factory FlightBookingList.fromJson(Map<String, dynamic> json) {
     return FlightBookingList(
@@ -429,23 +429,23 @@ class Leg {
   final String? alternativeRef;
   final Airport? arrivalAirport;
   final DateTime? arrivalDate;
-  final int? cabinType;
+  final dynamic cabinType;
   final String? classCode;
   final dynamic data;
   final Airport? departureAirport;
   final DateTime? departureDate;
   final String? fareBasis;
   final String? fareTitle;
-  final int? flightDuration;
+  final dynamic flightDuration;
   final String? flightNo;
   final bool? isConnectedToNextFlight;
-  final int? legOrderNo;
+  final dynamic legOrderNo;
   final List<dynamic> legStops;
   final TingAirline? operatingAirline;
   final String? segmentRef;
   final TingAirline? ticketingAirline;
   final dynamic vendorPnr;
-  final int? waitingDuration;
+  final dynamic waitingDuration;
 
   factory Leg.fromJson(Map<String, dynamic> json) {
     return Leg(
@@ -499,7 +499,7 @@ class Airport {
     required this.timeZone,
   });
 
-  final int? rating;
+  final dynamic rating;
   final dynamic searchingWords;
   final String? cityCode;
   final String? cityName;
@@ -508,9 +508,9 @@ class Airport {
   final String? countryName;
   final GeoLocation? geoLocation;
   final String? hotPointCodes;
-  final int? hotpointType;
+  final dynamic hotpointType;
   final String? name;
-  final int? timeZone;
+  final dynamic timeZone;
 
   factory Airport.fromJson(Map<String, dynamic> json) {
     return Airport(
@@ -561,7 +561,7 @@ class TingAirline {
     required this.ticketingCode,
   });
 
-  final int? rating;
+  final dynamic rating;
   final dynamic searchingWords;
   final String? checkInUrl;
   final String? code;
@@ -602,16 +602,16 @@ class PaxList {
 
   final List<BaggageAllowance> baggageAllowances;
   final Amount? bookingAmount;
-  final int? flightPaxType;
+  final dynamic flightPaxType;
   final List<dynamic> mileagePrograms;
   final List<dynamic> optionalServices;
   final dynamic passengerRef;
   final PaxGetModel? pax;
-  final int? recId;
+  final dynamic recId;
   final dynamic splitPnr;
-  final int? statusType;
+  final dynamic statusType;
   final String? ticketNumber;
-  final int? wheelChairServiceType;
+  final dynamic wheelChairServiceType;
 
   factory PaxList.fromJson(Map<String, dynamic> json) {
     return PaxList(
@@ -648,7 +648,7 @@ class BaggageAllowance {
   });
 
   final String? segmentRef;
-  final int? type;
+  final dynamic type;
   final String? value;
 
   factory BaggageAllowance.fromJson(Map<String, dynamic> json) {
@@ -683,12 +683,12 @@ class PaxGetModel {
     required this.statusType,
   });
 
-  final int? age;
+  final dynamic age;
   final String? dateOfBirth;
   final dynamic email;
   final dynamic employeeId;
   final String? firstName;
-  final int? genderType;
+  final dynamic genderType;
   final dynamic hesCode;
   final String? identityNumber;
   final String? lastName;
@@ -697,11 +697,11 @@ class PaxGetModel {
   final dynamic passportCountryCode;
   final dynamic passportGivenDate;
   final String? passportNumber;
-  final int? passportType;
+  final dynamic passportType;
   final String? passportValidityDate;
-  final int? paxId;
+  final dynamic paxId;
   final dynamic referenceId;
-  final int? statusType;
+  final dynamic statusType;
 
   factory PaxGetModel.fromJson(Map<String, dynamic> json) {
     return PaxGetModel(
@@ -741,7 +741,7 @@ class Rule {
   final String? description;
   final String? segmentRef;
   final String? title;
-  final int? inclusionType;
+  final dynamic inclusionType;
 
   factory Rule.fromJson(Map<String, dynamic> json) {
     return Rule(
@@ -779,11 +779,11 @@ class InvoiceInfo {
   final String? countryCode;
   final String? firstName;
   final String? invoiceInfoTitle;
-  final int? invoiceInfoType;
+  final dynamic invoiceInfoType;
   final String? lastName;
   final dynamic postalCode;
-  final int? recId;
-  final int? statusType;
+  final dynamic recId;
+  final dynamic statusType;
   final dynamic taxNumber;
   final dynamic taxOffice;
 

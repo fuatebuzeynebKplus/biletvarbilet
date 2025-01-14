@@ -177,12 +177,13 @@ class FareCardCombinedWidget extends StatelessWidget {
                                             TextWidget(
                                               textAlign: TextAlign.start,
                                               isHaveOverflow: true,
-                                              text: result
-                                                      .fares![index]
-                                                      .fareAlternativeLegs[
-                                                          indexSub]
-                                                      .fareTitle
-                                                      .isEmpty
+                                              text: (result
+                                                          .fares![index]
+                                                          .fareAlternativeLegs[
+                                                              indexSub]
+                                                          .fareTitle
+                                                          ?.isEmpty ??
+                                                      true)
                                                   ? 'STANDARD'
                                                   : result
                                                       .fares![index]
@@ -203,7 +204,7 @@ class FareCardCombinedWidget extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
-                                              flex: 6,
+                                              flex: 9,
                                               child: Wrap(
                                                 spacing: 2.0,
                                                 children: List.generate(
@@ -253,7 +254,7 @@ class FareCardCombinedWidget extends StatelessWidget {
                                                             .length -
                                                         1
                                                 ? Expanded(
-                                                    flex: 4,
+                                                    flex: 5,
                                                     child: Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment.end,
