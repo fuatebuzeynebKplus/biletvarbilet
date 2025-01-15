@@ -5,13 +5,19 @@ import 'package:bamobile1/common/data/enums/air_cabin_type.dart';
 import 'package:bamobile1/common/data/enums/gender_type.dart';
 import 'package:bamobile1/common/data/enums/pax_type.dart';
 import 'package:bamobile1/common/data/enums/weight_unit_type.dart';
-import 'package:bamobile1/common/data/models/company.dart';
 import 'package:bamobile1/cubit/auth-cubit/auth_cubit.dart';
-import 'package:bamobile1/cubit/currency-code-cubit/currency_code_cubit.dart';
 import 'package:bamobile1/cubit/flight_ticket-cubit/flight_ticket_cubit.dart';
-import 'package:bamobile1/flight/data/models/flight_booking.dart';
 import 'package:bamobile1/flight/data/models/flight_booking_leg.dart';
 import 'package:bamobile1/flight/data/models/flight_booking_pax.dart';
+import 'package:bamobile1/flight/data/models/get_booking_model.dart';
+import 'package:bamobile1/generated/l10n.dart';
+import 'package:bamobile1/utils/app_colors.dart';
+import 'package:bamobile1/utils/app_sizes.dart';
+import 'package:bamobile1/widgets/text_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+
 import 'package:bamobile1/flight/data/models/get_voucher.dart';
 import 'package:bamobile1/generated/l10n.dart';
 import 'package:bamobile1/helper/functions.dart';
@@ -111,10 +117,9 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
     FlightTicketCubit flightTicketCubit =
         BlocProvider.of<FlightTicketCubit>(context);
     AuthCubit authCubit = BlocProvider.of<AuthCubit>(context);
-    List<FlightBooking>? flightBookingList;
-    flightBookingList = flightTicketCubit
-        .getReservationsList[flightTicketCubit.saveReservationIndexValue!]
-        .flightBookingList;
+    List<FlightBookingList> flightBookingList = [];
+    flightBookingList =
+        flightTicketCubit.getBookingModelDetails!.result!.flightBookingList;
 
     // Parse the HTML string
     print('0000000000000');
@@ -189,97 +194,6 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
             pw.Row(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                // العمود الأول (Acenta Bilgileri)
-                pw.Expanded(
-                  flex: 4, // التحكم بنسبة العمود الأول
-                  child: pw.Container(
-                    height: 180,
-                    decoration: pw.BoxDecoration(
-                      border: pw.Border.all(
-                          color: PdfColors.black, width: 1), // الإطار
-                    ),
-                    child: pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                        // عنوان القسم
-                        pw.Container(
-                          width: double.infinity,
-                          color: PdfColor.fromHex('F4822C'),
-                          padding: const pw.EdgeInsets.all(8),
-                          child: pw.Text(
-                            agencyInformation,
-                            style: pw.TextStyle(
-                                fontSize: 10,
-                                color: PdfColors.white,
-                                font: robotoFontBold),
-                          ),
-                        ),
-                        pw.SizedBox(height: 8),
-                        // محتويات الجدول
-                        pw.Row(
-                          crossAxisAlignment: pw.CrossAxisAlignment.start,
-                          children: [
-                            pw.SizedBox(width: 8),
-                            // صورة
-                            pw.Image(
-                              pw.MemoryImage(imageBytes),
-                              fit: pw.BoxFit.contain, // Adjust fit as needed
-                              height: 60, // Make the image stretch vertically
-                              width: 60,
-                            ),
-
-                            pw.SizedBox(width: 12),
-                            // النصوص
-                            pw.Expanded(
-                              child: pw.Column(
-                                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                                children: [
-                                  buildInfoRowWithDivider(
-                                      company,
-                                      '${authCubit.agentFirstName} ${authCubit.agentLastName}',
-                                      robotoFont,
-                                      isHeader: true),
-                                  buildInfoRowWithDivider(phonr,
-                                      '${authCubit.agentPhone}', robotoFont,
-                                      isHeader: true),
-                                  buildInfoRowWithDivider(
-                                      fax, '${authCubit.agentFax}', robotoFont,
-                                      isHeader: true),
-                                  buildInfoRowWithDivider(email,
-                                      '${authCubit.agentEmail}', robotoFont,
-                                      isHeader: true),
-                                  buildInfoRowWithDivider(
-                                      iataNo, '${authCubit.iataNo}', robotoFont,
-                                      isHeader: true),
-                                  buildInfoRowWithDivider(
-                                      location,
-                                      ' : ${authCubit.companyAddressCity} / ${authCubit.companyAddressCountry}',
-                                      robotoFont,
-                                      isHeader: true),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        // العنوان السفلي
-                        // pw.Container(
-                        //   width: double.infinity,
-                        //   padding: const pw.EdgeInsets.all(8),
-                        //   child: pw.Text(
-                        //     '$location : ${authCubit.companyAddressCity}/ ${authCubit.companyAddressCountry}',
-                        //     style: const pw.TextStyle(
-                        //       fontSize: 8,
-                        //     ),
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                pw.SizedBox(width: 8), // مسافة بين العمودين
-                // العمود الثاني (Resrvasyon Bilgileri + الجدول)
                 pw.Expanded(
                   flex: 2, // التحكم بنسبة العمود الثاني
                   child: pw.Column(
@@ -301,7 +215,7 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
                       // مسافة صغيرة بين العنوان والجدول
                       // الجدول
                       buildTableReservationInfo(
-                          flightBookingList: flightBookingList!, robotoFont),
+                          flightBookingList: flightBookingList, robotoFont),
 
                       // عنوان الجدول
                       flightTicketCubit.voucherWithPrice == false
@@ -372,7 +286,7 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
                 ),
               ),
             ),
-            buildTablesForAllList(
+            buildTablesForAllLegFlights(
               robotoFont,
               flightBookingList,
             ),
@@ -388,9 +302,7 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
                 // Custom font for title
               ),
             ),
-            pw.SizedBox(height: 5), // مسافة بين العنوان والمحتوى
-
-            // إضافة العناصر من القائمة مع * وبداية كل عنصر
+            pw.SizedBox(height: 5),
             for (var item in extractedTexts) ...[
               pw.Padding(
                 padding: const pw.EdgeInsets.only(left: 18),
@@ -403,7 +315,7 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
                   ),
                 ),
               ),
-              pw.SizedBox(height: 5), // سطر فارغ بعد كل عنصر
+              pw.SizedBox(height: 5),
             ],
             pw.SizedBox(height: 5),
             pw.Text(
@@ -616,25 +528,25 @@ pw.Row(
 
   */
 
-  pw.Widget buildTablesForAllList(
-    pw.Font? font,
-    List<FlightBooking> flightBookingList,
-  ) {
-    return pw.Column(
-      children: List.generate(
-        flightBookingList.length, // عدد الركاب في القائمة
-        (index) => buildTablesForAllLegFlights(font, flightBookingList, index),
-      ),
-    );
-  }
+  // pw.Widget buildTablesForAllList(
+  //   pw.Font? font,
+  //   List<FlightBookingList> flightBookingList,
+  // ) {
+  //   return pw.Column(
+  //     children: List.generate(
+  //       flightBookingList.length,
+  //       (index) => buildTablesForAllLegFlights(font, flightBookingList, index),
+  //     ),
+  //   );
+  // }
 
   pw.Widget buildTablesForAllPassengers(
     pw.Font? font,
-    List<FlightBooking> flightBookingList,
+    List<FlightBookingList> flightBookingList,
   ) {
     return pw.Column(
       children: List.generate(
-        flightBookingList[0].paxList!.length, // عدد الركاب في القائمة
+        flightBookingList[0].paxList.length, // عدد الركاب في القائمة
         (index) => pw.Padding(
           padding: const pw.EdgeInsets.only(bottom: 0), // مسافة بين الجداول
           child: buildTablePassengerInfo(
@@ -650,7 +562,7 @@ pw.Row(
 
 // Main PDF table structure with auto-size and full width
   pw.Widget buildTablePassengerInfo(pw.Font? font,
-      {required List<FlightBooking> flightBookingList,
+      {required List<FlightBookingList> flightBookingList,
       required int index,
       required bool showTitle}) {
     return pw.Table(
@@ -679,23 +591,22 @@ pw.Row(
         pw.TableRow(
           children: [
             _buildTableCell(
-                flightBookingList.first.paxList![index].pax!.genderType ==
+                flightBookingList.first.paxList[index].pax!.genderType ==
                         GenderType.male
                     ? 'Mr.'
                     : 'Ms.',
                 font),
             _buildTableCell(
-                '${flightBookingList.first.paxList![index].pax!.firstName} ${flightBookingList.first.paxList![index].pax!.lastName}',
+                '${flightBookingList.first.paxList[index].pax!.firstName} ${flightBookingList.first.paxList[index].pax!.lastName}',
                 font),
             _buildTableCell(
-                '${flightBookingList.first.paxList![index].pax!.dateOfBirth}',
+                '${flightBookingList.first.paxList[index].pax!.dateOfBirth}',
                 font),
             _buildTableCell(
-                '${flightBookingList.first.paxList![index].pax!.identityNumber == null || flightBookingList.first.paxList![index].pax!.identityNumber == "" ? flightBookingList.first.paxList![index].pax!.passportNumber : flightBookingList.first.paxList![index].pax!.identityNumber}',
+                '${flightBookingList.first.paxList[index].pax!.identityNumber == null || flightBookingList.first.paxList[index].pax!.identityNumber == "" ? flightBookingList.first.paxList[index].pax!.passportNumber : flightBookingList.first.paxList[index].pax!.identityNumber}',
                 font),
             _buildTableCell(
-                '${flightBookingList.first.paxList![index].ticketNumber}',
-                font),
+                '${flightBookingList.first.paxList[index].ticketNumber}', font),
           ],
         ),
         // Add more rows if needed here
@@ -704,7 +615,7 @@ pw.Row(
   }
 
   pw.Widget buildTableReservationInfo(pw.Font? font,
-      {required List<FlightBooking> flightBookingList}) {
+      {required List<FlightBookingList> flightBookingList}) {
     return pw.Table(
       border: pw.TableBorder.all(color: PdfColors.grey, width: 0.5),
       columnWidths: {
@@ -718,8 +629,8 @@ pw.Row(
             _buildTableCell(S.of(context).TransactionDate, font,
                 fontSize: 30), // عنوان العمود الأول
             _buildTableCell(
-                DateFormat('yyyy.MM.dd HH:mm').format(
-                    DateTime.parse(flightBookingList.first.bookingDate!)),
+                DateFormat('yyyy.MM.dd HH:mm')
+                    .format(flightBookingList.first.bookingDate!),
                 font,
                 fontSize: 30), // عنوان العمود الثاني
           ],
@@ -729,7 +640,7 @@ pw.Row(
           children: [
             _buildTableCell('PNR', font, fontSize: 20), // بيانات العمود الأول
             _buildTableCell(
-                '${flightBookingList.first.legs!.first.vendorPnr}', font,
+                '${flightBookingList.first.legs.first.vendorPnr}', font,
                 fontSize: 20), // بيانات العمود الثاني
           ],
         ),
@@ -739,7 +650,7 @@ pw.Row(
   }
 
   pw.Widget buildTablePriceInfo(pw.Font? font,
-      {required List<FlightBooking> flightBookingList}) {
+      {required List<FlightBookingList> flightBookingList}) {
     return pw.Table(
       border: pw.TableBorder.all(color: PdfColors.grey, width: 0.5),
       columnWidths: {
@@ -753,7 +664,7 @@ pw.Row(
             _buildTableCell(S.of(context).TicketPrice, font,
                 fontSize: 20), // عنوان العمود الأول
             _buildTableCell(
-                '${(flightBookingList.first.amount!.totalSellAmount! - flightBookingList.first.amount!.totalTaxAmount!).toStringAsFixed(2)} '
+                '${(BlocProvider.of<FlightTicketCubit>(context).formatNumber(flightBookingList.first.amount!.totalSellAmount! - flightBookingList.first.amount!.totalTaxAmount!))} '
                 '${flightBookingList.first.amount!.currencyCode!}',
                 font,
                 fontSize: 20), // عنوان العمود الثاني
@@ -765,7 +676,7 @@ pw.Row(
             _buildTableCell(S.of(context).Taxes, font,
                 fontSize: 20), // بيانات العمود الأول
             _buildTableCell(
-                '${(flightBookingList.first.amount!.totalTaxAmount!).toStringAsFixed(2)} '
+                '${(BlocProvider.of<FlightTicketCubit>(context).formatNumber(flightBookingList.first.amount!.totalTaxAmount!))} '
                 '${flightBookingList.first.amount!.currencyCode!}',
                 font,
                 fontSize: 20), // بيانات العمود الثاني
@@ -778,10 +689,11 @@ pw.Row(
             _buildTableCell(S.of(context).TotalCharge, font,
                 fontSize: 20), // عنوان العمود الأول
             _buildTableCell(
-                '${(flightBookingList.first.amount!.totalSellAmount!).toStringAsFixed(2)} '
+                '${(BlocProvider.of<FlightTicketCubit>(context).formatNumber(flightBookingList.first.amount!.totalSellAmount!))} ' //.toStringAsFixed(2)
+
                 '${flightBookingList.first.amount!.currencyCode!}',
                 font,
-                fontSize: 20), // عنوان العمود الثاني
+                fontSize: 20),
           ],
         ),
       ],
@@ -789,20 +701,20 @@ pw.Row(
   }
 
   pw.Widget buildTablesForAllLegFlights(
-      pw.Font? font, List<FlightBooking> flightBookingList, int indexMain) {
+    pw.Font? font,
+    List<FlightBookingList> flightBookingList,
+  ) {
     return pw.Column(
       children: List.generate(
-        flightBookingList[indexMain].legs!.length, // عدد الرحلات في القائمة
+        flightBookingList[0].legs.length,
         (index) => pw.Padding(
-          padding: const pw.EdgeInsets.only(bottom: 0), // مسافة بين الجداول
+          padding: const pw.EdgeInsets.only(bottom: 0),
           child: buildTableFlightInfo(
-            indexMain: indexMain,
+            indexMain: 0,
             font,
             flightBookingList: flightBookingList,
             index: index,
-            showTitle: index == 0 && indexMain == 0
-                ? true
-                : false, // عرض العنوان فقط لأول جدول
+            showTitle: index == 0, //
           ),
         ),
       ),
@@ -810,7 +722,7 @@ pw.Row(
   }
 
   pw.Widget buildTableFlightInfo(pw.Font? font,
-      {required List<FlightBooking> flightBookingList,
+      {required List<FlightBookingList> flightBookingList,
       required int index,
       required bool showTitle,
       required int indexMain}) {
@@ -847,33 +759,62 @@ pw.Row(
         pw.TableRow(
           children: [
             _buildTableCell(
-                '${flightBookingList[indexMain].legs![index].ticketingAirline!.name}',
+                '${flightBookingList[indexMain].legs[index].ticketingAirline!.name}',
                 font),
             _buildTableCell(
-                '${flightBookingList[indexMain].legs![index].departureAirport!.name} ||  ${flightBookingList[indexMain].legs![index].arrivalAirport!.name}',
+                '${flightBookingList[indexMain].legs[index].departureAirport!.name} ||  ${flightBookingList[indexMain].legs[index].arrivalAirport!.name}',
                 font),
             _buildTableCell(
-                '${flightBookingList[indexMain].legs![index].ticketingAirline!.ticketingCode}${flightBookingList[indexMain].legs![index].flightNo}',
+                '${flightBookingList[indexMain].legs[index].ticketingAirline!.ticketingCode}${flightBookingList[indexMain].legs[index].flightNo}',
                 font),
             _buildTableCell(
-                DateFormat('yyyy.MM.dd HH:mm').format(DateTime.parse(
-                    flightBookingList[indexMain].legs![index].departureDate!)),
+                DateFormat('yyyy.MM.dd HH:mm').format(
+                    flightBookingList[indexMain].legs[index].departureDate!),
                 font),
             _buildTableCell(
-                DateFormat('yyyy.MM.dd HH:mm').format(DateTime.parse(
-                    flightBookingList[indexMain].legs![index].arrivalDate!)),
+                DateFormat('yyyy.MM.dd HH:mm').format(
+                    flightBookingList[indexMain].legs[index].arrivalDate!),
                 font),
             _buildTableCell(
-                ' ${flightBookingList[indexMain].paxList![indexMain].flightPaxType == PaxType.adult ? 'Adult: ' : flightBookingList[indexMain].paxList![index].flightPaxType == PaxType.child ? 'Child: ' : 'Baby: '} ${flightBookingList[indexMain].paxList![indexMain].baggageAllowances![index].type == WeightUnitType.pc ? flightBookingList[indexMain].paxList![indexMain].baggageAllowances![index].value == '0' ? 'HandLuggage' : 'PC' : '${flightBookingList[indexMain].paxList![indexMain].baggageAllowances![index].value!}KG'} ',
+                '${flightBookingList[indexMain].paxList[indexMain].flightPaxType == 0 ? 'Adult: ' : flightBookingList[indexMain].paxList[index].flightPaxType == 1 ? 'Child: ' : 'Baby: '} ${flightBookingList[indexMain].paxList[indexMain].baggageAllowances[index].type == WeightUnitType.pc ? flightBookingList[indexMain].paxList[indexMain].baggageAllowances[index].value == '0' ? 'HandLuggage' : 'PC' : '${flightBookingList[indexMain].paxList[indexMain].baggageAllowances[index].value!}KG'}',
                 font),
             _buildTableCell(
-                '${flightBookingList[indexMain].legs![index].classCode} - ${flightBookingList[indexMain].legs![index].cabinType == AirCabinType.business ? 'Business' : 'Economy'}',
+                '${flightBookingList[indexMain].legs[index].classCode} - ${flightBookingList[indexMain].legs[index].cabinType == AirCabinType.business ? 'Business' : 'Economy'}',
                 font),
             _buildTableCell(
-                flightBookingList[indexMain].paxList![indexMain].statusType == 1
+                flightBookingList[indexMain].paxList[indexMain].statusType == 1
                     ? 'Ok'
                     : 'Not Ok',
                 font),
+
+            // _buildTableCell(
+            //     '${flightBookingList[indexMain].legs[index].ticketingAirline!.name}',
+            //     font),
+            // _buildTableCell(
+            //     '${flightBookingList[indexMain].legs[index].departureAirport!.name} ||  ${flightBookingList[indexMain].legs[index].arrivalAirport!.name}',
+            //     font),
+            // _buildTableCell(
+            //     '${flightBookingList[indexMain].legs[index].ticketingAirline!.ticketingCode}${flightBookingList[indexMain].legs[index].flightNo}',
+            //     font),
+            // _buildTableCell(
+            // DateFormat('yyyy.MM.dd HH:mm').format(
+            //     flightBookingList[indexMain].legs[index].departureDate!),
+            //     font),
+            // _buildTableCell(
+            // DateFormat('yyyy.MM.dd HH:mm').format(
+            //     flightBookingList[indexMain].legs[index].arrivalDate!),
+            //     font),
+            // _buildTableCell(
+            //     ' ${flightBookingList[indexMain].paxList[indexMain].flightPaxType == PaxType.adult ? 'Adult: ' : flightBookingList[indexMain].paxList[index].flightPaxType == PaxType.child ? 'Child: ' : 'Baby: '} ${flightBookingList[indexMain].paxList[indexMain].baggageAllowances[index].type == WeightUnitType.pc ? flightBookingList[indexMain].paxList[indexMain].baggageAllowances[index].value == '0' ? 'HandLuggage' : 'PC' : '${flightBookingList[indexMain].paxList[indexMain].baggageAllowances[index].value!}KG'} ',
+            //     font),
+            // _buildTableCell(
+            //     '${flightBookingList[indexMain].legs[index].classCode} - ${flightBookingList[indexMain].legs[index].cabinType == AirCabinType.business ? 'Business' : 'Economy'}',
+            //     font),
+            // _buildTableCell(
+            // flightBookingList[indexMain].paxList[indexMain].statusType == 1
+            //     ? 'Ok'
+            //     : 'Not Ok',
+            //     font),
           ],
         ),
         // Add more rows if needed here

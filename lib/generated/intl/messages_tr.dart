@@ -335,7 +335,7 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Yolcu sayısı ilgili yolcu türüyle uyumlu değil"),
         "PassengerInformation":
             MessageLookupByLibrary.simpleMessage("Yolcu Bilgileri"),
-        "PassengerType": MessageLookupByLibrary.simpleMessage("\'Yolcu Tipi"),
+        "PassengerType": MessageLookupByLibrary.simpleMessage("Yolcu Tipi"),
         "PassportAndIDDetails": MessageLookupByLibrary.simpleMessage(
             "Pasaport veya Kimlik Bilgileri"),
         "PassportNumber":

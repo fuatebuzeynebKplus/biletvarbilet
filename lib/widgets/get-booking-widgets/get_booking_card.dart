@@ -1,6 +1,7 @@
 import 'package:bamobile1/common/data/enums/booking_status_type.dart';
 import 'package:bamobile1/cubit/currency-code-cubit/currency_code_cubit.dart';
 import 'package:bamobile1/cubit/flight_ticket-cubit/flight_ticket_cubit.dart';
+import 'package:bamobile1/flight/data/models/get_voucher.dart';
 import 'package:bamobile1/generated/l10n.dart';
 import 'package:bamobile1/helper/shared-preferences/cache_hekper.dart';
 import 'package:bamobile1/helper/shared-preferences/service_locator.dart';
@@ -366,6 +367,21 @@ class GetBookingCard extends StatelessWidget {
                 ButtonWidget(
                   title: S.of(context).ReservationDetails,
                   onTap: () {
+                    flightTicketCubit.getVoucher(
+                        GetVoucherJson(
+                            request: GetVoucher(
+                          tokenCode: getIt<CacheHelper>()
+                                  .getDataString(key: 'token') ??
+                              "",
+                          systemPnr: flightTicketCubit.systemPnrForGetBook!,
+                          lastName: flightTicketCubit.lastNameForGetBook!,
+                          productType: 0,
+                          languageCode:
+                              getIt<CacheHelper>().getDataString(key: 'lang') ??
+                                  "en",
+                          withPrice: true,
+                        )),
+                        context);
                     Navigator.pushNamed(context, BookDetailsView.id);
                   },
                   height: 0.04,

@@ -796,6 +796,7 @@ class FlightTicketCubit extends Cubit<FlightTicketState> {
     emit(SelectRadioButtonForSortState());
   }
 
+  int apple = 0;
   String formatNumber(double number) {
     String formattedNumber = number.toStringAsFixed(2);
 
